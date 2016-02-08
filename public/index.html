@@ -2,17 +2,29 @@
 <head>
     <title>Meeples Anon</title>
     <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/MAweb.css" rel="stylesheet" />
 
     <script src="js/angular.js"></script>
-    <script src="js/xml2json.js"></script>
+    
     <script src="features/services/controller.js"></script>
-
-
 </head>
 <body ng-app="MAapp">
     <div class="container" ng-controller="MACtrl">
         <h1>Meeples Anon</h1>
-        
+        <input ng-model="searchString" /><button class="btn btn-primary" ng-click="myFunction()">Search</button>
+        <div ng-repeat="results in searchResults">
+            <div ng-repeat="item in results">
+                <div id="searchborder" ng-repeat="fields in item">
+                    <div ng-repeat="names in fields">
+                        <div ng-repeat="name in names">
+                           {{name._}}{{name.name}}
+                        </div>
+                        
+                        <div></div>
+                    </div><button class="btn btn-primary" ng-click="">Select Game</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

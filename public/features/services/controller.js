@@ -2,11 +2,14 @@
 app.controller('MACtrl',['$scope', '$http', function ($scope, $http) {
     
     console.log("Controller - Start");
-
-    $http.get('/searchbgg').success(function (response) {
+    $scope.myFunction = function() {
+        $http({
+            method: "GET",
+            url: '/searchbgg:' + $scope.searchString            
+        }).success(function (data) {
         console.log("Controller - search results");
 
-        $scope.searchresults = response;
+        $scope.searchResults = data;
     })
-
+}
 }]);

@@ -1,0 +1,9 @@
+﻿body {
+}
+
+#searchborder{
+    width: 300px;
+    padding: 15px;
+    border: 5px solid navy;
+    margin: 25px;
+}
