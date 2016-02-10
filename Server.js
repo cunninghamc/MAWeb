@@ -7,8 +7,6 @@ var parseString = require('xml2js').parseString;
 
 var http = require('http');
 
-
-
 app.use(express.static(__dirname + '/public'));
 
 function xmlToJson(url, callback) {
@@ -90,4 +88,4 @@ app.get('/searchgame:gameID', function (req, res) {
 
 
 app.listen(80);
-console.log("Starting Web Server Port 80")
+console.log("Starting Web Server Port 80");
