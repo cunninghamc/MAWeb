@@ -7,3 +7,8 @@
     border: 5px solid navy;
     margin: 25px;
 }
+#modalTable td{
+    padding:5px;
+    margin: 0;
+
+}

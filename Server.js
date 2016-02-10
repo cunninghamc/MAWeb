@@ -53,14 +53,41 @@ app.get('/searchbgg:search', function (req, res) {
 
         // Do whatever you want with the data here
         // Following just pretty-prints the object
-        //console.log(JSON.stringify(data, null, 2));
+        console.log(JSON.stringify(data, null, 2));
         console.log("Server - Finished Search");
 
         res.json(data);
 
     }
-    )});   
+    )
+});
+
+app.get('/searchgame:gameID', function (req, res) {
+
+    console.log("Server - searchgame");
+    var GameID = req.params.gameID;
+    console.log(GameID);
+    var url = "http://www.boardgamegeek.com/xmlapi/boardgame/" + GameID;
+
+    console.log(url);
+
+    xmlToJson(url, function (err, data) {
+        if (err) {
+            // Handle this however you like
+            return console.err(err);
+        }
+
+        // Do whatever you want with the data here
+        // Following just pretty-prints the object
+        console.log(JSON.stringify(data, null, 2));
+        console.log("Server - Finished Search");
+
+        res.json(data);
+
+    }
+    )
+});
 
 
-app.listen(3000);
-console.log("Starting Web Server Port 3000")
+app.listen(80);
+console.log("Starting Web Server Port 80")
