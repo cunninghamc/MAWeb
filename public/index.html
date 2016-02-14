@@ -3,10 +3,11 @@
     <title>Meeples Anon</title>
 
     <link href="css/MAweb.css" rel="stylesheet" />
-
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.0/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     <script src="js/angular.js"></script>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.0/js/bootstrap-toggle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
@@ -16,91 +17,45 @@
 
 </head>
 <body ng-app="MAapp">
-    <div class="container" ng-controller="MACtrl">
-        <h1>Meeples Anon</h1>
-        <input ng-model="searchString" /><button class="btn btn-primary" ng-click="Function_searchbgg()">Search</button>
-        <div ng-repeat="results in searchResults">
-            <div ng-repeat="item in results">
-                <div id="searchborder" ng-repeat="fields in item">
-                    <div ng-repeat="names in fields">
-                        <div ng-repeat="game in names | filter:game._">
-                            {{game._}}
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" data-toggle="modal" ng-click="Function_searchgame(fields.$.objectid)" data-target="#myModal">Select Game</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                {{gameDetail=gameInfo.boardgames.boardgame;""}}
-                <div ng-repeat="details in gameDetail">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            {{details.name[0]._}}
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel"></h4>
-                        </div>
-                        <div class="modal-body row">
-                            <table>
-                                <tr id="modalTable">
-                                    <td colspan="2">
-                                        <img src="{{details.thumbnail[0]}}" />
+    <div ng-controller="mainController">
+        <div ng-show=loading>Searching...</div>
+        <div ng-hide=loading>
+            <div class="container" ng-controller="MACtrl">
+                <h1>Meeples Anon</h1>
+                <input ng-model="searchString" /><button class="btn btn-primary" ng-click="Function_searchbgg()">Search</button>
+                <div ng-repeat="results in searchResults">
+                    <div ng-repeat="Ids in results">
+                        <div ng-repeat="data in Ids">
+                            <table><tr><td><br /></td></tr>
+                                <tr>                                    
+                                    <td>
+                                        <div>
+                                            <input id="btnCheck" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
+                                        </div>
                                     </td>
-                                    <td rowspan="4">
-                                        {{details.description[0] | limitTo: 275}}...
+                                    <td id="imgCell">
+                                        <img id="thumbImage" src="{{data.thumbnail[0]}}" />
+                                    </td>
+                                    <td>
+                                        {{data.name[0]._}}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        Min Players:
-                                    </td>
-                                    <td>
-                                        {{details.minplayers[0]}}
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Max Players:
-                                    </td>
-                                    <td>
-                                        {{details.maxplayers[0]}}
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Play Time:
-                                    </td>
-                                    <td>
-                                        {{details.playingtime[0]}}
-                                    </td>
-                                    <td></td>
-                                </tr>
+                                
                             </table>
-                            
-                            <br />
-                             
-                             
-                             
-                            
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary">Add to Library</button>
-                            <button type="button" class="btn btn-success">Add to Wishlist</button>
-                            <button type="button" ng-click="redirectToBgg()" class="btn btn-warning">View on BGG.com</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
+                            <div id="collapse{{ $index + 1}}" class="collapse">
+                                
+                                <button type="button" class="btn btn-primary">Add to Library</button>
+                                <button type="button" class="btn btn-success">Add to Wishlist</button>
+                                <button type="button" ng-click="redirectToBgg(data.$.objectid)" class="btn btn-warning">View on BGG.com</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Play</button>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
 </body>
 </html>

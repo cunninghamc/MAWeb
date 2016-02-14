@@ -1,11 +1,12 @@
 ﻿var app = angular.module('MAapp', []);
 
 app.controller('MACtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
-   
+    $scope.loading = false;
     console.log("Controller - Start");
        
-
+  
     $scope.Function_searchbgg = function () {
+        $scope.$emit('LOAD');
         $http({
             method: "GET",
             url: '/searchbgg:' + $scope.searchString
@@ -14,27 +15,20 @@ app.controller('MACtrl', ['$scope', '$http', '$window', function ($scope, $http,
             console.log("SearchString: " + $scope.searchString);
 
             $scope.searchResults = searchData;
+            $scope.$emit('UNLOAD');
         });
     };
     
-   
-    $scope.Function_searchgame = function (game) {
-        $http({
-            method: "GET",
-            url: '/searchgame' + game
-        }).success(function (gameData) {
-            console.log("Controller - game results");
-            console.log("bggGameId: " + game);
-            console.log($scope.gameInfo)
-            $scope.gameInfo = gameData;
-            $scope.gameUrl = "https://boardgamegeek.com/boardgame/" + game;
-            console.log($scope.gameInfo)
-            console.log($scope.gameUrl)
-        });
 
-    }
-
-    $scope.redirectToBgg = function () {
-        $window.location.href = ($scope.gameUrl);
+    $scope.redirectToBgg = function (gameUrl) {
+        $window.location.href = ("https://boardgamegeek.com/boardgame/" + gameUrl);
     };
+    
+    
 }]);
+
+app.controller('mainController', ['$scope', function ($scope) {
+    $scope.$on('LOAD', function () { $scope.loading = true });
+    $scope.$on('UNLOAD', function () { $scope.loading = false });
+}]);
+
