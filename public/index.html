@@ -37,7 +37,11 @@
                                         <img id="thumbImage" src="{{data.thumbnail[0]}}" />
                                     </td>
                                     <td>
-                                        {{data.name[0]._}}
+                                        <div ng-repeat="names in data.name | filter : names.$.primary ">
+                                            <div ng-if="names.$.primary">
+                                                {{names._}}
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 

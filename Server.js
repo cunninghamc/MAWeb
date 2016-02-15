@@ -94,7 +94,7 @@ app.get('/searchbgg:search', function (req, res) {
         //console.log(JSON.stringify(data, null, 2));
         console.log("Server - Finished Search");
         
-       console.log(data);
+       //console.log(data);
 
        var bggSearchUrl = "http://www.boardgamegeek.com/xmlapi/boardgame/" + data;
 
