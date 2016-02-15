@@ -17,8 +17,11 @@
 
 </head>
 <body ng-app="MAapp">
-    <div ng-controller="mainController">
-        <div ng-show=loading>Searching...</div>
+    <div class="container" ng-controller="mainController">
+        <div id="loadingPage" ng-show=loading>
+            <img src="images/loading.gif" />
+            
+        </div>
         <div ng-hide=loading>
             <div class="container" ng-controller="MACtrl">
                 <h1>Meeples Anon</h1>
@@ -26,8 +29,9 @@
                 <div ng-repeat="results in searchResults">
                     <div ng-repeat="Ids in results">
                         <div ng-repeat="data in Ids">
-                            <table><tr><td><br /></td></tr>
-                                <tr>                                    
+                            <table>
+                                <tr><td><br /></td></tr>
+                                <tr>
                                     <td>
                                         <div>
                                             <input id="btnCheck" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
@@ -44,16 +48,16 @@
                                         </div>
                                     </td>
                                 </tr>
-                                
+
                             </table>
 
                             <div id="collapse{{ $index + 1}}" class="collapse">
-                                
+
                                 <button type="button" class="btn btn-primary">Add to Library</button>
                                 <button type="button" class="btn btn-success">Add to Wishlist</button>
                                 <button type="button" ng-click="redirectToBgg(data.$.objectid)" class="btn btn-warning">View on BGG.com</button>
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Play</button>
-                                
+
                             </div>
                         </div>
                     </div>
