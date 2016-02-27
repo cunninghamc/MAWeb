@@ -9,6 +9,12 @@ var http = require('http');
 
 var S = require('string');
 
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
+var dbUrl = 'mongodb://server:27017/MAwebDB'
+
+
+
 app.use(express.static(__dirname + '/public'));
 
 function xmlToJson(url, callback) {
@@ -64,7 +70,7 @@ function bggPullOutIds(url, callback) {
 
                 
             });
-
+            //console.log(idList);
             callback(null, idList);
         }); 
         });
@@ -77,11 +83,9 @@ app.get('/searchbgg:search', function (req, res) {
     var searchStr = req.params.search;
 
     var url = "http://www.boardgamegeek.com/xmlapi/search?search=" + searchStr;
-    
-
-    console.log(url);
    
-       
+    console.log(url);
+          
 
     bggPullOutIds(url, function (err, data) {
         if (err) {
@@ -92,7 +96,7 @@ app.get('/searchbgg:search', function (req, res) {
         // Do whatever you want with the data here
         // Following just pretty-prints the object
         //console.log(JSON.stringify(data, null, 2));
-        console.log("Server - Finished Search");
+        console.log("Server - bggPullOutIds");
         
        //console.log(data);
 
@@ -107,42 +111,50 @@ app.get('/searchbgg:search', function (req, res) {
            // Do whatever you want with the data here
            // Following just pretty-prints the object
            // console.log(JSON.stringify(data, null, 2));
-           console.log("Server - Finished Search");
+           console.log("Server - Finished bggSearch");
 
            res.json(data);
 
            //console.log(data);
-       }
-   )
-    }
-    )
+       })
+    })
 });
 
-app.get('/searchgame:gameID', function (req, res) {
 
-    console.log("Server - searchgame");
-    var GameID = req.params.gameID;
-    console.log(GameID);
-    var url = "http://www.boardgamegeek.com/xmlapi/boardgame/" + GameID;
 
-    console.log(url);
+app.post('/db_insert_mastergamelist', function (req, res) {
 
-    xmlToJson(url, function (err, data) {
+    var GameData = req.body;
+    console.log('Start - insert mastergamelist');
+    console.log(GameData);
+
+   
+    
+    MongoClient.connect(dbUrl, function (err, db) {
         if (err) {
-            // Handle this however you like
-            return console.err(err);
+            console.log(err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+
+            collection.insert(GameData, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('docs inserted');
+                };
+
+                db.close();
+            });
+            
         }
 
-        // Do whatever you want with the data here
-        // Following just pretty-prints the object
-       // console.log(JSON.stringify(data, null, 2));
-        console.log("Server - Finished Search");
 
-        res.json(data);
+    });
 
-    }
-    )
-});
+    res;
+})
 
 
 app.listen(80);

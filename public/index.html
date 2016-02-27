@@ -29,6 +29,7 @@
                 <div ng-repeat="results in searchResults">
                     <div ng-repeat="Ids in results">
                         <div ng-repeat="data in Ids">
+                            
                             <table>
                                 <tr><td><br /></td></tr>
                                 <tr>
@@ -43,7 +44,9 @@
                                     <td>
                                         <div ng-repeat="names in data.name | filter : names.$.primary ">
                                             <div ng-if="names.$.primary">
+                                               
                                                 {{names._}}
+                                               
                                             </div>
                                         </div>
                                     </td>
@@ -53,10 +56,10 @@
 
                             <div id="collapse{{ $index + 1}}" class="collapse">
 
-                                <button type="button" class="btn btn-primary">Add to Library</button>
+                                <button type="button" ng-click="AddToLibrary(data)" class="btn btn-primary">Add to Library</button>
                                 <button type="button" class="btn btn-success">Add to Wishlist</button>
                                 <button type="button" ng-click="redirectToBgg(data.$.objectid)" class="btn btn-warning">View on BGG.com</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Play</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Log Play</button>
 
                             </div>
                         </div>
