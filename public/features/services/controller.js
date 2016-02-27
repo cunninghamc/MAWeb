@@ -35,15 +35,15 @@ app.controller('MACtrl', ['$scope', '$http', '$window', function ($scope, $http,
 
         console.log(Game);
 
-        //var jsonGame = JSON.parse(Game);
+        var jsonGame = JSON.parse(Game);
 
-        //console.log(jsonGame);
+        console.log(jsonGame);
 
 
 
-        $http.post("/db_insert_mastergamelist", Game).success(function () {
+        $http.post("/db_insert_mastergamelist", JSON.stringify(jsonGame)).success(function () {
             console.log("Controller - AddToLibrary");
-           
+        
             
             $scope.$emit('UNLOAD');
         });

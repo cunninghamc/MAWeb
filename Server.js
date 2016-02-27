@@ -13,8 +13,9 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var dbUrl = 'mongodb://server:27017/MAwebDB'
 
+var bodyParser = require("body-parser")
 
-
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 
 function xmlToJson(url, callback) {
@@ -153,7 +154,7 @@ app.post('/db_insert_mastergamelist', function (req, res) {
 
     });
 
-    res;
+    res.send('Good');
 })
 
 
