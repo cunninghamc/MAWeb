@@ -3,9 +3,7 @@
 #imgCell{
      width:100px;
      height:50px;
-     text-align:center;
-     
-     
+     text-align:center;    
 }
 #thumbImage{
     width:auto;
@@ -16,5 +14,32 @@
      width:40px;
     height:40px;
     
+}
+
+    /* Hero */
+.hexbtns {
+  position: relative;
+}
+.hexbtn {
+  position: relative;
+  max-width: 100%;
+  margin: 3rem auto -12rem;
+}
+.hexbtn + .hexbtn {
+  display: none;
+}
+.subpageTitle{
+float:left;
+
+}
+.subpageLogo{
+    float:left;
+  
+
+
+}
+.searchTable{
+
+    border:none;
 }
 

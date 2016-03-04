@@ -1,0 +1,66 @@
+﻿<div class="container">
+    <div class="subpageLogo">
+        <img ng-src="/images/addHexLogo.png" hero-id="searchImg" class="hero" ng-click="searchClicked();">
+
+    </div>
+    <div class="subpageTitle">
+        <h2 hero-id="searchTitle" class="hero">Search Games</h2>
+
+    </div>
+    <br style="clear: left;" />
+
+    <div class="container">
+
+        <div>
+            <div class="container">
+
+                <input ng-model="searchString" /><button class="btn btn-primary" ng-click="loading=true;Function_searchbgg();">Search</button>
+                <div id="loadingPage" ng-show=loading>
+                    <img src="images/loading.gif" />
+
+                </div>
+                <div id="dataPage" ng-hide=loading>
+                    <div ng-repeat="results in searchResults">
+                        <div ng-repeat="Ids in results">
+                            <div ng-repeat="data in Ids">
+
+                                <table>
+                                    <tr><td class="searchTable"><br /></td></tr>
+                                    <tr>
+                                        <td class="searchTable">
+                                            <div>
+                                                <input id="btnCheck" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
+                                            </div>
+                                        </td>
+                                        <td id="imgCell" class="searchTable">
+                                            <img id="thumbImage" src="{{data.thumbnail[0]}}" />
+                                        </td>
+                                        <td class="searchTable">
+                                            <div ng-repeat="names in data.name | filter : names.$.primary ">
+                                                <div ng-if="names.$.primary">
+
+                                                    {{names._}}
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </table>
+
+                                <div id="collapse{{ $index + 1}}" class="collapse">
+
+                                    <button type="button" ng-click="AddToLibrary(data)" class="btn btn-primary">Add to Library</button>
+                                    <button type="button" class="btn btn-success">Add to Wishlist</button>
+                                    <button type="button" ng-click="redirectToBgg(data.$.objectid)" class="btn btn-warning">View on BGG.com</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Log Play</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

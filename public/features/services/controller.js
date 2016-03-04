@@ -1,66 +1,42 @@
-﻿var app = angular.module('MAapp', []);
+﻿
 
-app.controller('MACtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
+
+
+angular.module('MAapp.main', ['ngRoute'])
+
+.config(['$routeProvider', function ($routeProvider) {
+    $routeProvider.when('/views/main', {
+        templateUrl: 'views/main/main.html',
+        controller: 'mainCtrl'
+    });
+}])
+
+.controller('mainCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
     $scope.loading = false;
     console.log("Controller - Start");
-       
-  
-    $scope.Function_searchbgg = function () {
-        $scope.$emit('LOAD');
+    $scope.imgUrl = '/images/MAWhite.png';
+
+    $scope.loginScript = function (loginStr) {
+        console.log(loginStr);
+
         $http({
             method: "GET",
-            url: '/searchbgg' + $scope.searchString
-        }).success(function (searchData) {
-            console.log("Controller - search results");
-            console.log("SearchString: " + $scope.searchString);
+            url: '/loginSearch' + loginStr
+        }).success(function (userData) {
 
-            $scope.searchResults = searchData;
-            $scope.$emit('UNLOAD');
+
+            console.log("Controller - Login results");
+            console.log(userData);
+            console.log(userData[0].User_Color);
+
+                $scope.imgUrl = userData[0].User_Color;
+                $scope.userName = userData[0].User_Name;
+                $scope.userLibrary = userData[0].User_Library;
+                $scope.userWishList = userData[0].User_WishList;
+
+
         });
-    };
-    
 
-    $scope.AddToLibrary = function (gameData) {
-        $scope.$emit('LOAD');
-        console.log('Start - AddToLibrary')
-        console.log(gameData);
-
-        var Game = '{'; 
-        Game = Game + '"Game_Name": "' + gameData.name[0]._ + '",';
-        Game = Game + '"Game_ObjectId": ' + gameData.$.objectid + ',';
-        Game = Game + '"Game_MinPlayers": ' + gameData.minplayers[0] + ',';
-        Game = Game + '"Game_MaxPlayers": ' + gameData.maxplayers[0] + ',';
-        Game = Game + '"Game_PlayTime": ' + gameData.playingtime[0] + ',';
-        Game = Game + '"Game_Thumbnail": "' + gameData.thumbnail[0] + '"}';
-
-        console.log(Game);
-
-        var jsonGame = JSON.parse(Game);
-
-        console.log(jsonGame);
-
-
-
-        $http.post("/db_insert_mastergamelist", JSON.stringify(jsonGame)).success(function () {
-            console.log("Controller - AddToLibrary");
-        
-            
-            $scope.$emit('UNLOAD');
-        });
     };
 
-
-
-
-    $scope.redirectToBgg = function (gameUrl) {
-        $window.location.href = ("https://boardgamegeek.com/boardgame/" + gameUrl);
-    };
-    
-    
 }]);
-
-app.controller('mainController', ['$scope', function ($scope) {
-    $scope.$on('LOAD', function () { $scope.loading = true });
-    $scope.$on('UNLOAD', function () { $scope.loading = false });
-}]);
-
