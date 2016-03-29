@@ -7,7 +7,7 @@
     });
 }])
 
-.controller('searchCtrl', ['$scope', '$http', '$window', '$location', function ($scope, $http, $window, $location) {
+.controller('searchCtrl', ['$scope', '$http', '$window', '$location', '$rootScope', function ($scope, $http, $window, $location, $rootScope) {
     console.log('search active');
     $scope.loading = false;
     $scope.searchClicked = function () {
@@ -21,7 +21,7 @@
         
         $http({
             method: "GET",
-            url: '/searchbgg:' + $scope.searchString
+            url: '/searchbgg' + $scope.searchString 
         }).success(function (searchData) {
             console.log("Controller - search results");
             console.log("SearchString: " + $scope.searchString);
@@ -41,13 +41,12 @@
 
         $http({
             method: "GET",
-            url: '/db_find_game' + objectId
+            url: '/db_find_game_master' + objectId 
         }).success(function (result) {
-            console.log("Controller - find game")
-            console.log(result);
+            console.log("Controller - find game master");
+            console.log(result.body);
 
-            if (result <= 0) {
-
+            if (result == 'false') {
 
                 var Game = '{';
                 Game = Game + '"Game_Name": "' + gameData.name[0]._ + '",';
@@ -63,31 +62,47 @@
 
                 console.log(jsonGame);
 
-
-
                 $http.post("/db_insert_mastergamelist", jsonGame).success(function (status) {
 
                     console.log("Controller - AddToLibrary Finished");
+                    
+                });
+            } else {
+                console.log('Game Already in DB');
+            };
+           
+        });
 
+        $http({
+            method: "GET",
+            url: '/db_find_game_library/' + objectId + '/' + $rootScope.userLibrary
+        }).success(function (result) {
+            console.log("Controller - find game library")
+            console.log(result);
+
+            if (result == 'false') {
+              
+                   
+                var Game = '{ "gameId" : "' + objectId + '","libraryId" : "' + $rootScope.userLibrary + '" }';
+
+                console.log(Game);
+
+                var jsonGame = JSON.parse(Game);
+
+                console.log(jsonGame);
+
+                $http.post('/db_insert_gameLibrary/', jsonGame ).success(function (status) {
+
+                    console.log("Controller - AddToLibrary Finished");
 
                 });
             } else {
-
-                console.log('Game Already in DB');
-
-
-
+                console.log('Game Already in library');
             };
-            
 
         });
 
-
-
-
     };
-
-
 
 
     $scope.redirectToBgg = function (gameUrl) {

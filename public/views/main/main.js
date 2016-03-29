@@ -1,6 +1,11 @@
 ﻿
 angular.module('MAapp.main', ['ngRoute'])
 
+.run(function ($rootScope) {
+    $rootScope.imgUrl = '/images/MAWhite.png';
+    $rootScope.userLibrary = '';
+})
+
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/views/main/', {
         templateUrl: 'views/main/main.html',
@@ -8,10 +13,10 @@ angular.module('MAapp.main', ['ngRoute'])
     });
 }])
 
-.controller('mainCtrl', ['$scope', '$http', '$window', '$location', function ($scope, $http, $window, $location) {
+.controller('mainCtrl', ['$scope', '$rootScope', '$http', '$window', '$location', function ($scope, $rootScope, $http, $window, $location) {
     $scope.loading = false;
     console.log("Controller - Start");
-    $scope.imgUrl = '/images/MAWhite.png';
+   
 
     $scope.loginScript = function (loginStr) {
         console.log(loginStr);
@@ -25,9 +30,9 @@ angular.module('MAapp.main', ['ngRoute'])
             console.log(userData);
             console.log(userData[0].User_Color);
 
-            $scope.imgUrl = userData[0].User_Color;
+            $rootScope.imgUrl = userData[0].User_Color;
             $scope.userName = userData[0].User_Name;
-            $scope.userLibrary = userData[0].User_Library;
+            $rootScope.userLibrary = userData[0].User_Library;
             $scope.userWishList = userData[0].User_WishList;
             
         });

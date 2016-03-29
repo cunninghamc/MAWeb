@@ -17,6 +17,7 @@ var bodyParser = require("body-parser")
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 app.use(express.static(__dirname + '/public'));
 
 //********************************************************************************************//
@@ -28,7 +29,7 @@ app.get('/loginSearch:loginStr', function (req, result) {
 
     MongoClient.connect(dbUrl, function (err, db) {
         if (err) {
-            console.log(err);
+            console.log('error:' + err);
         } else {
             console.log('Connected to', dbUrl);
             var collection = db.collection('UserList');
@@ -148,31 +149,35 @@ app.get('/searchbgg:search', function (req, res) {
     })
 });
 
-app.get('/db_find_game:objectId', function (req, result) {
+app.get('/db_find_game_master:objectId', function (req, result) {
 
     var GameId = req.params.objectId;
-    console.log('Start - find Game');
-    console.log(GameId);
+    console.log('Start - find Game master');
+    console.log('fgm-GameId: ' + GameId);
     
    
-
     MongoClient.connect(dbUrl, function (err, db) {
         if (err) {
-            console.log(err);
+            console.log('error:' + err);
         } else {
-            console.log('Connected to', dbUrl);
+
+            var numResults = 'false';
+
+            console.log('fgm-Connected to', dbUrl);
             var collection = db.collection('MasterGameList');
             collection.find({ 'Game_ObjectId': GameId }).toArray(function (err, res) {
                 if (err) {
                     console.log('error: ' & err);
                 } else if (res.length) {
-                    gameInfo = res.length;
-                    console.log(gameInfo);
+                    console.log("fgm-MasterGameLibrary: " + res.length);
+                    numResults = 'true';
                 } else {
-                    console.log('No User Found');
+                    console.log('fgm-Game not found in Master Game list');
                 };
                 db.close();
-                result.json(res.length);
+
+                console.log("fgm.res-" + numResults);
+                result.send(numResults);
             });
                 
         }
@@ -185,17 +190,60 @@ app.get('/db_find_game:objectId', function (req, result) {
 
 });
 
+app.get('/db_find_game_library/:objectId/:libraryId', function (req, result) {
+
+    var GameId = req.params.objectId;
+    var LibraryId = req.params.libraryId;
+    console.log('Start - find Game library');
+    console.log('fgu-GameId: ' + GameId);
+    console.log('fgu-LibraryId: ' + LibraryId);
+
+    
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error: ' + err);
+        } else {
+            console.log('fgu-Connected to', dbUrl);
+            var collection = db.collection('GameLibrarys');
+            // 
+        var numResults = 'false';
+            var o_id = new mongodb.ObjectId(LibraryId);
+            collection.find({ "_id" : o_id , "gameList" : GameId }).toArray(function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else if (res.length) {                   
+                    console.log("fgu-UserGameLibrary: " + res.length);
+                    numResults = 'true';
+                } else {
+                    console.log('fgu-Game not found in User Library List');
+                };
+                db.close();
+                
+                console.log("fgu.res-" + numResults);
+                result.send(numResults);
+            });
+
+        }
+
+    });
+
+
+
+
+
+});
 app.post('/db_insert_mastergamelist', function (req, res) {
 
     var GameData = req.body;
     console.log('Start - insert mastergamelist');
-    console.log(GameData);
+    console.log('imgl-GameData:' + GameData);
 
 
 
     MongoClient.connect(dbUrl, function (err, db) {
         if (err) {
-            console.log(err);
+            console.log('error:' + err);
         } else {
             console.log('Connected to', dbUrl);
 
@@ -213,7 +261,45 @@ app.post('/db_insert_mastergamelist', function (req, res) {
             });
 
         }
-        res.json('1');
+        res.end('1');
+
+    });
+
+
+});
+
+app.post('/db_insert_gamelibrary', function (req, res) {
+
+    var GameId = req.body.gameId;
+    var LibraryId = req.body.libraryId;
+   
+
+    console.log('Start - insert usergamelibrary');
+    console.log('iugl-GameId:' + GameId);
+    console.log('iugl-LibraryId:' + LibraryId);
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('GameLibrarys');
+            var o_id = new mongodb.ObjectId(LibraryId);
+
+            collection.update({ "_id": o_id }, { $push: { "gameList": GameId } }, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('docs inserted');
+                };
+
+                db.close();
+
+            });
+
+        }
+        res.end('1');
 
     });
 
