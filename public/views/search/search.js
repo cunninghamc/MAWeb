@@ -54,7 +54,8 @@
                 Game = Game + '"Game_MinPlayers": "' + gameData.minplayers[0] + '",';
                 Game = Game + '"Game_MaxPlayers": "' + gameData.maxplayers[0] + '",';
                 Game = Game + '"Game_PlayTime": "' + gameData.playingtime[0] + '",';
-                Game = Game + '"Game_Thumbnail": "' + gameData.thumbnail[0] + '"}';
+                Game = Game + '"Game_Thumbnail": "' + gameData.thumbnail[0] + '",';
+                Game = Game + '"Game_Librarys": ["' + $rootScope.userLibrary + '"]}';
 
                 console.log(Game);
 
@@ -68,6 +69,10 @@
                     
                 });
             } else {
+
+
+
+
                 console.log('Game Already in DB');
             };
            

@@ -11,7 +11,7 @@ var S = require('string');
 
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
-var dbUrl = 'mongodb://server:27017/MAwebDB'
+var dbUrl = 'mongodb://webserver:27017/MAwebDB'
 
 var bodyParser = require("body-parser")
 
@@ -170,6 +170,7 @@ app.get('/db_find_game_master:objectId', function (req, result) {
                     console.log('error: ' & err);
                 } else if (res.length) {
                     console.log("fgm-MasterGameLibrary: " + res.length);
+                    console.log(res);
                     numResults = 'true';
                 } else {
                     console.log('fgm-Game not found in Master Game list');
