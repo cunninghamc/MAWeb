@@ -8,6 +8,7 @@ var parseString = require('xml2js').parseString;
 var http = require('http');
 
 var S = require('string');
+var assert = require('assert');
 
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
@@ -191,49 +192,7 @@ app.get('/db_find_game_master:objectId', function (req, result) {
 
 });
 
-app.get('/db_find_game_library/:objectId/:libraryId', function (req, result) {
 
-    var GameId = req.params.objectId;
-    var LibraryId = req.params.libraryId;
-    console.log('Start - find Game library');
-    console.log('fgu-GameId: ' + GameId);
-    console.log('fgu-LibraryId: ' + LibraryId);
-
-    
-
-    MongoClient.connect(dbUrl, function (err, db) {
-        if (err) {
-            console.log('error: ' + err);
-        } else {
-            console.log('fgu-Connected to', dbUrl);
-            var collection = db.collection('GameLibrarys');
-            // 
-        var numResults = 'false';
-            var o_id = new mongodb.ObjectId(LibraryId);
-            collection.find({ "_id" : o_id , "gameList" : GameId }).toArray(function (err, res) {
-                if (err) {
-                    console.log('error: ' & err);
-                } else if (res.length) {                   
-                    console.log("fgu-UserGameLibrary: " + res.length);
-                    numResults = 'true';
-                } else {
-                    console.log('fgu-Game not found in User Library List');
-                };
-                db.close();
-                
-                console.log("fgu.res-" + numResults);
-                result.send(numResults);
-            });
-
-        }
-
-    });
-
-
-
-
-
-});
 app.post('/db_insert_mastergamelist', function (req, res) {
 
     var GameData = req.body;
@@ -269,15 +228,13 @@ app.post('/db_insert_mastergamelist', function (req, res) {
 
 });
 
-app.post('/db_insert_gamelibrary', function (req, res) {
+app.put('/db_update_mastergamelist:userId', function (req, res) {
 
-    var GameId = req.body.gameId;
-    var LibraryId = req.body.libraryId;
-   
+    var GameData = req.body;
+    console.log('Start - update mastergamelist');
+    console.log('umgl-GameData:' + GameData);
 
-    console.log('Start - insert usergamelibrary');
-    console.log('iugl-GameId:' + GameId);
-    console.log('iugl-LibraryId:' + LibraryId);
+    var UserId = req.params.userId;
 
     MongoClient.connect(dbUrl, function (err, db) {
         if (err) {
@@ -285,27 +242,25 @@ app.post('/db_insert_gamelibrary', function (req, res) {
         } else {
             console.log('Connected to', dbUrl);
 
-            var collection = db.collection('GameLibrarys');
-            var o_id = new mongodb.ObjectId(LibraryId);
-
-            collection.update({ "_id": o_id }, { $push: { "gameList": GameId } }, function (err, res) {
+            var collection = db.collection('MasterGameList');
+            
+            collection.updateOne( GameData , { $addToSet: { "Game_Owners" : UserId }} , function (err, res) {
                 if (err) {
                     console.log('error: ' & err);
                 } else {
-                    console.log('docs inserted');
+                    console.log('docs update');
                 };
 
                 db.close();
 
             });
-
         }
-        res.end('1');
-
-    });
-
-
+        res.end('Added');
+     });
+    
 });
+
+
 
 
 app.listen(80);

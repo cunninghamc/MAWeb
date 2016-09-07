@@ -32,7 +32,7 @@ angular.module('MAapp.main', ['ngRoute'])
 
             $rootScope.imgUrl = userData[0].User_Color;
             $scope.userName = userData[0].User_Name;
-            $rootScope.userLibrary = userData[0].User_Library;
+            $rootScope.userID = userData[0]._id;
             $scope.userWishList = userData[0].User_WishList;
             
         });
