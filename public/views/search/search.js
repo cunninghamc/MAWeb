@@ -33,8 +33,8 @@
     };
 
 
-    $scope.AddToLibrary = function (gameData) {
-        
+    $scope.AddToLibrary = function (gameData,index) {
+        $('#btnCheck' + index).click();
         console.log('Start - AddToLibrary')
         //console.log(gameData);
         var objectId = gameData.$.objectid;
@@ -85,8 +85,7 @@
                     console.log("Controller - UpdateLibrary Finished");
                     console.log("status = " + status);
                     
-
-                });
+             });
 
                 
             };

@@ -29,7 +29,7 @@
                                     <tr>
                                         <td class="searchTable">
                                             <div>
-                                                <input id="btnCheck" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
+                                                <input class="btnCheck "id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
                                             </div>
                                         </td>
                                         <td id="imgCell" class="searchTable">
@@ -50,7 +50,7 @@
 
                                 <div id="collapse{{ $index + 1}}" class="collapse">
 
-                                    <button type="button" ng-click="AddToLibrary(data)" class="btn btn-primary">Add to Library</button>
+                                    <button type="button" ng-click="AddToLibrary(data,$index)" class="btn btn-primary">Add to Library</button>
                                     <button type="button" class="btn btn-success">Add to Wishlist</button>
                                     <button type="button" ng-click="redirectToBgg(data.$.objectid)" class="btn btn-warning">View on BGG.com</button>
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Log Play</button>
