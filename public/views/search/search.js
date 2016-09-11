@@ -33,12 +33,32 @@
     };
 
 
-    $scope.AddToLibrary = function (gameData,index) {
+    $scope.AddToLibrary = function (reqType,gameData,index) {
         $('#btnCheck' + index).click();
         console.log('Start - AddToLibrary')
         //console.log(gameData);
         var objectId = gameData.$.objectid;
         console.log(objectId);
+        var ownersData = "";
+        var wisherData = "";
+        var updateData = "";
+        switch (reqType) {
+            case "LibraryAdd":
+                ownersData = '"Game_Owners": ["' + $rootScope.userID + '"],';
+                wisherData = '"Game_Wishers": [],';
+
+                updateData = '{"Game_Owners" : "' + $rootScope.userID + '"}';
+                break;
+            case "WishListAdd":
+                ownersData = '"Game_Owners": [],';
+                wisherData = '"Game_Wishers": ["' + $rootScope.userID + '"],';
+
+                updateData = '{"Game_Wishers" : "' + $rootScope.userID + '"}';
+                break;
+            default:
+                ownersData = '"Game_Owners": [],';
+                wisherData = '"Game_Wishers": [],';
+        };
 
         $http({
             method: "GET",
@@ -56,8 +76,8 @@
                 Game = Game + '"Game_MaxPlayers": "' + gameData.maxplayers[0] + '",';
                 Game = Game + '"Game_PlayTime": "' + gameData.playingtime[0] + '",';
                 Game = Game + '"Game_Thumbnail": "' + gameData.thumbnail[0] + '",';
-                Game = Game + '"Game_Owners": ["' + $rootScope.userID + '"],';
-                Game = Game + '"Game_Wishers": [],';
+                Game = Game + ownersData;
+                Game = Game + wisherData;
                 Game = Game + '"Game_Rating": [],';
                 Game = Game + '"Game_Plays": []}';
 
@@ -77,10 +97,10 @@
                 console.log('Game Already in DB');
                 console.log('Adding new owner');
 
-                var GameName = '{"Game_ObjectId" : "' + objectId + '"}' 
-                var jsonGameName = JSON.parse(GameName);
-                console.log(GameName);
-                $http.put("/db_update_mastergamelist" + $rootScope.userID, GameName).success(function (status) {
+                
+                console.log(updateData);
+
+                $http.put("/db_update_mastergamelist" + gameData.$.objectid, updateData).success(function (status) {
 
                     console.log("Controller - UpdateLibrary Finished");
                     console.log("status = " + status);

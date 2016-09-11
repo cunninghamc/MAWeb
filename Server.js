@@ -228,23 +228,28 @@ app.post('/db_insert_mastergamelist', function (req, res) {
 
 });
 
-app.put('/db_update_mastergamelist:userId', function (req, res) {
+app.put('/db_update_mastergamelist:gameId', function (req, res) {
 
-    var GameData = req.body;
+    var updateInfo = req.body;
     console.log('Start - update mastergamelist');
-    console.log('umgl-GameData:' + GameData);
+   
+    
 
-    var UserId = req.params.userId;
+    var gameId = req.params.gameId;
+    console.log('umgl-gameId : ' + gameId);
+    var gameName = '{"Game_ObjectId" : "' + gameId + '"}';
 
     MongoClient.connect(dbUrl, function (err, db) {
         if (err) {
             console.log('error:' + err);
         } else {
             console.log('Connected to', dbUrl);
-
+            var addString = "{ $addToSet : " + JSON.stringify(updateInfo) + " } ";
             var collection = db.collection('MasterGameList');
-            
-            collection.updateOne( GameData , { $addToSet: { "Game_Owners" : UserId }} , function (err, res) {
+            console.log(JSON.stringify(updateInfo));
+            console.log(gameId);
+
+            collection.updateOne({ "Game_ObjectId" : gameId } , { $addToSet : updateInfo } , function (err, res) {
                 if (err) {
                     console.log('error: ' & err);
                 } else {
@@ -252,7 +257,7 @@ app.put('/db_update_mastergamelist:userId', function (req, res) {
                 };
 
                 db.close();
-
+                console.log('db close');
             });
         }
         res.end('Added');
@@ -262,6 +267,86 @@ app.put('/db_update_mastergamelist:userId', function (req, res) {
 
 
 
+app.get('/db_mastergamelist:userId', function (req, res) {
+    
+    var userId = req.params.userId;
+    console.log('Start - get mastergamelist');
+    console.log('gmgl - ' + userId);
+    
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+            var findStr = ' { "Game_Owners" : "' + userId + '"}' ;
+            var jsonFindStr = JSON.parse(findStr);
+            console.log('gmgl - ' + findStr);
+
+            collection.find(JSON.parse(findStr)).toArray(function (err, results) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('library Found');
+                    console.log(results);
+                    res.send(results);
+                };
+
+                db.close();
+
+            });
+
+        }
+        //res.end('1');
+
+    });
+
+
+});
+
+
+app.post('/db_insert_gameRating:gameId', function (req, res) {
+
+    var GameData = req.params.gameId;
+    console.log('Start - insert rating');
+    console.log('---GameId : ' + GameData);
+
+    var RateData = req.body;
+    console.log('---RateInfo : ' + RateData);
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+
+            //"{ Game_ObjectId : 13 } , { $set: { Game_Rating: [{User: 33342325353, Rating: 5 }] }, {upsert:true}"
+
+            var inputStr = '{ "Game_Rating" : [' + JSON.stringify(RateData) + ']}';
+            console.log("---inputStr " + inputStr)
+
+            collection.updateOne({ "Game_ObjectId" : GameData }, {$set : JSON.parse(inputStr)}, { upsert: true}, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('docs inserted');
+                };
+
+                db.close();
+
+            });
+
+        }
+
+        res.end('1');
+
+    });
+
+
+});
 
 app.listen(80);
 console.log("Starting Web Server Port 80");

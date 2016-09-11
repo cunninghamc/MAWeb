@@ -50,10 +50,10 @@
 
                                 <div id="collapse{{ $index + 1}}" class="collapse">
 
-                                    <button type="button" ng-click="AddToLibrary(data,$index)" class="btn btn-primary">Add to Library</button>
-                                    <button type="button" class="btn btn-success">Add to Wishlist</button>
+                                    <button type="button" ng-click="AddToLibrary('LibraryAdd',data,$index)" class="btn btn-primary">Add to Library</button>
+                                    <button type="button" ng-click="AddToLibrary('WishListAdd',data,$index)" class="btn btn-success">Add to Wishlist</button>
                                     <button type="button" ng-click="redirectToBgg(data.$.objectid)" class="btn btn-warning">View on BGG.com</button>
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Log Play</button>
+                                    <button type="button" class="btn btn-info" data-dismiss="modal">Log Play</button>
 
                                 </div>
                             </div>
