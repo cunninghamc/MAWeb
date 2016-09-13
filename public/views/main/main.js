@@ -2,7 +2,7 @@
 angular.module('MAapp.main', ['ngRoute'])
 
 .run(function ($rootScope) {
-    $rootScope.imgUrl = '/images/MAWhite.png';
+    $rootScope.imgUrl = 'MAWhite.png';
     $rootScope.userLibrary = '';
 })
 
