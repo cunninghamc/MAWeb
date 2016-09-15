@@ -46,35 +46,45 @@
                         </table>
 
                         <div id="collapse{{ $index + 1}}" class="collapse">
-                            <table>
+                            <table class="libraryTable">
                                 <tr>
-                                    <td>
+                                    <td class="library_td_l">
                                         Min Players:
                                     </td>
-                                    <td>
-                                        {{data.Game_MinPlayers}}
-                                    </td>
-                                    <td width="20px"></td>
-                                    <td>
+                                    <td width="35px" class="library_td_l"></td>
+                                    <td class="library_td_l">
                                         Avg Rating:
                                     </td>
-                                    <td>
+                                </tr>
+                                <tr>
+                                    <td class="library_td_r">
+                                        {{data.Game_MinPlayers}}
+                                    </td>
+                                    <td width="35px"></td>
+                                    <td class="library_td_r">
                                         {{avg_rate = calculateAverage(data.Game_Rating);""}}
                                         <span uib-rating ng-model="avg_rate" max="max" read-only=true></span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="library_td_l">
                                         Max Players:
                                     </td>
-                                    <td>
+                                    
+                                    <td class="library_td_l"></td>
+                                    <td class="library_td_l">
+                                        Your Rating:
+                                    </td>
+                                   
+                                </tr>
+                                <tr>
+                                    
+                                    <td class="library_td_r">
                                         {{data.Game_MaxPlayers}}
                                     </td>
                                     <td></td>
-                                    <td>
-                                        Your Rating:
-                                    </td>
-                                    <td>
+                                    
+                                    <td class="library_td_r">
                                         {{my_rate = findMyRating(data.Game_Rating);""}}
                                         {{gameId = data.Game_ObjectId;""}}
                                         <span uib-rating ng-model="my_rate" max="max" read-only=false ng-click="ratingClicked(data.Game_ObjectId);" on-hover="hoveringOver(value)"></span>
@@ -82,17 +92,24 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="library_td_l">
                                         Play Time:
                                     </td>
-                                    <td>
+                                    
+                                    <td class="library_td_l"></td>
+                                    <td class="library_td_l">
+                                        Logged Plays:
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                   
+                                    <td class="library_td_r">
                                         {{data.Game_PlayTime}} min
                                     </td>
                                     <td></td>
-                                    <td>
-                                        Logged Plays:
-                                    </td>
-                                    <td>
+                                   
+                                    <td class="library_td_r">
                                         6
                                     </td>
                                 </tr>

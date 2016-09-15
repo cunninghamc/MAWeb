@@ -42,4 +42,17 @@ float:left;
 
     border:none;
 }
+.libraryTable{
+
+   width:35%;
+}
+.library_td_r{
+
+    text-align:right;
+    
+}
+.library_td_l{
+border:none;
+    text-align:left;
+}
 

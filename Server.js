@@ -12,7 +12,7 @@ var assert = require('assert');
 
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
-var dbUrl = 'mongodb://server:27017/MAWebDB'
+var dbUrl = 'mongodb://server:27017/MAwebDB'
 
 var bodyParser = require("body-parser")
 
