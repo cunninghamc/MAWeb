@@ -306,14 +306,13 @@ app.get('/db_mastergamelist:userId', function (req, res) {
 });
 
 
-app.post('/db_insert_gameRating:gameId', function (req, res) {
+app.post('/db_insert_gameRating', function (req, res) {    
 
-    var GameData = req.params.gameId;
-    console.log('Start - insert rating');
-    console.log('---GameId : ' + GameData);
-
-    var RateData = req.body;
-    console.log('---RateInfo : ' + RateData);
+    var vars = req.body;
+    //console.log('---Vars : ' + JSON.stringify(vars));
+    console.log('---Vars_GameID : ' + vars.GameID);
+    console.log('---Vars_UserID : ' + vars.UserID);
+    console.log('---Vars_Rating : ' + vars.GameRating);
 
     MongoClient.connect(dbUrl, function (err, db) {
         if (err) {
@@ -325,14 +324,65 @@ app.post('/db_insert_gameRating:gameId', function (req, res) {
 
             //"{ Game_ObjectId : 13 } , { $set: { Game_Rating: [{User: 33342325353, Rating: 5 }] }, {upsert:true}"
 
-            var inputStr = '{ "Game_Rating" : [' + JSON.stringify(RateData) + ']}';
-            console.log("---inputStr " + inputStr)
+            //var inputStr = '{ "Game_Rating" : ' + JSON.stringify(RateData) + '}';
+            var jsonData1 = '{ "Game_Rating.$.Rating" : ' + vars.GameRating + ' }';
+            console.log("---JSON 1 :  " + jsonData1);
 
-            collection.updateOne({ "Game_ObjectId" : GameData }, {$set : JSON.parse(inputStr)}, { upsert: true}, function (err, res) {
+            collection.update({ "Game_ObjectId": vars.GameID, "Game_Rating.User": vars.UserID }, { $set: JSON.parse(jsonData1)}, false, function (err, res) {
                 if (err) {
                     console.log('error: ' & err);
                 } else {
-                    console.log('docs inserted');
+                    console.log('GameRating Updated');
+                };                
+
+            });
+
+            var jsonData2 = '{ "Game_Rating" : { "User" : "' + vars.UserID + '" , "Rating" : ' + vars.GameRating + ' }}';
+            console.log("---JSON 2 :  " + jsonData2);
+            collection.update({ "Game_ObjectId": vars.GameID, "Game_Rating.User": { $ne: vars.UserID } }, { $addToSet: JSON.parse(jsonData2) }, false, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('GameRating Added');
+                };
+
+                db.close();
+
+            });
+
+        }
+
+        res.end('1');
+
+    });
+
+
+});
+
+
+app.post('/db_remove_game', function (req, res) {
+    
+    var vars = req.body;
+    
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+
+            console.log('GameID: ' + vars.GameID);
+            console.log('UserID: ' + vars.UserID);
+
+            jsonvar = '{ "Game_Owners" : "' + vars.UserID + '" }';
+            console.log('jsonvar: ' + jsonvar);
+
+            collection.update({ "Game_ObjectId" : vars.GameID }, { $pull: JSON.parse(jsonvar) }, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('Game Removed');
                 };
 
                 db.close();

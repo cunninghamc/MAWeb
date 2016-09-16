@@ -42,9 +42,12 @@
 
         console.log("----starclicked ----- " + $scope.overStar);
 
-        jsonInfo = '{ "User" : "' + $rootScope.userID + '", "Rating" : ' + $scope.overStar + ' }';
+        //jsonInfo = '{ "User" : "' + $rootScope.userID + '", "Rating" : ' + $scope.overStar + ' }';
 
-        $http.post("/db_insert_gameRating" + gameId, JSON.parse(jsonInfo)).success(function (status) {
+        jsonInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userID + '", "GameRating" : ' + $scope.overStar +' }';
+        
+
+        $http.post("/db_insert_gameRating", JSON.parse(jsonInfo)).success(function (status) {
 
             console.log("Controller - AddRating Finished");
 
@@ -62,41 +65,71 @@
         });
 
     };
-        
+
+
+    $scope.removeClicked = function (gameId) {
+        console.log("Controller - remove Clicked");
+        removeInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userID + '" }';
+
+
+        $http.post("/db_remove_game", JSON.parse(removeInfo)).success(function (status) {
+
+            console.log("Controller - AddRating Finished");
+
+            $http({
+                method: "GET",
+                url: 'db_mastergamelist' + $rootScope.userID
+            }).success(function (libraryData) {
+                console.log("Controller - remove results");
+
+                $scope.removeResults = libraryData;
+                console.log("removeResults - " + $scope.removeResults);
+
+            });
+
+        });
+
+        $http({
+            method: "GET",
+            url: 'db_mastergamelist' + $rootScope.userID
+        }).success(function (libraryData) {
+            console.log("Controller - library results");
+
+            $scope.libraryResults = libraryData;
+            console.log("libraryResults - " + $scope.libraryResults);
+
+        });
+    };
     $scope.findMyRating = function (MyData) {
         rating = 0;
         if (Object.keys(MyData).length > 0) {
-            console.log("data2 - " + JSON.stringify(MyData));
-            console.log("length2 - " + Object.keys(MyData).length);
+            console.log("my_data - " + JSON.stringify(MyData));
+            console.log("my_length - " + Object.keys(MyData).length);
 
             var sum = 0; for (var i = 0; i < Object.keys(MyData).length; i++) {
-                if (MyData[i].User = $rootScope.userID) {
-                    console.log("rating:" + MyData[i].Rating);
+                if (MyData[i].User == $rootScope.userID) {
+                    console.log("my_rating:" + MyData[i].Rating);
                     rating = MyData[i].Rating;
-                };
-                
-                return rating;
-
+                };    
             };
-        };
+        }; return rating;
     };
 
 
     $scope.calculateAverage = function (MyData) {
         if (Object.keys(MyData).length > 0) {
-            console.log("data - " + JSON.stringify(MyData));
-            console.log("length - " + Object.keys(MyData).length);
+            console.log("avg_data - " + JSON.stringify(MyData));
+            console.log("avg_length - " + Object.keys(MyData).length);
 
             var sum = 0; for (var i = 0; i < Object.keys(MyData).length; i++) {
-                console.log("value - " + MyData[i].Rating);
+                console.log("avg_value - " + MyData[i].Rating);
                 sum += parseInt(MyData[i].Rating, 10);
             }; //don't forget to add the base
             
             var avg = sum / Object.keys(MyData).length;
 
             console.log("avg- " + avg);
-            return avg;
-            
+            return avg;            
         };
     };
 

@@ -60,6 +60,7 @@
                                     </td>
                                     <td>
                                         {{avg_rate = calculateAverage(data.Game_Rating);""}}
+                                        
                                         <span uib-rating ng-model="avg_rate" max="max" read-only=true></span>
                                     </td>
                                 </tr>
@@ -76,7 +77,7 @@
                                     </td>
                                     <td>
                                         {{my_rate = findMyRating(data.Game_Rating);""}}
-                                        {{gameId = data.Game_ObjectId;""}}
+                                        
                                         <span uib-rating ng-model="my_rate" max="max" read-only=false ng-click="ratingClicked(data.Game_ObjectId);" on-hover="hoveringOver(value)"></span>
 
                                     </td>
@@ -104,7 +105,7 @@
                             <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
                             <button type="button" ng-click="" class="btn btn-info">Log Game Play</button>
                             <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
-                            <button type="button" ng-click="removeGame(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <button type="button" ng-click="removeClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
 
                             <div class="modal fade" role="dialog" aria-hidden="true" id="modal-signin">
                                 <div class="modal-dialog">
