@@ -28,12 +28,12 @@ angular.module('MAapp.main', ['ngRoute'])
 
             console.log("Controller - Login results");
             console.log(userData);
-            console.log(userData[0].User_Color);
-
+           
             $rootScope.imgUrl = userData[0].User_Color;
             $scope.userName = userData[0].User_Name;
             $rootScope.userID = userData[0]._id;
-            
+            $rootScope.userLibrary = userData[0].User_Library;
+            $scope.loginStr = "";
             
         });
 

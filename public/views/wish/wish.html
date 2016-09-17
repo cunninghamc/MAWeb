@@ -1,6 +1,66 @@
-﻿<div>
-    <h2 hero-id="wishTitle" class="hero">View Games</h2>
-    <img src="/images/EditHex.png" hero-id="wishImg" class="hero" ng-click="wishClicked();">
+﻿    <div class="container">
+        
+        <div class="subpageLogo">
+            <img ng-src="/images/editHexLogo.png" hero-id="wishImg" class="hero" ng-click="wishClicked();">
 
+        </div>
+        
+        <div class="subpageTitle">
+            <h2 hero-id="WishTitle" class="hero">Wish List</h2>
+
+        </div>
+
+        <br style="clear: left;" />
+
+        <div class="container">
+
+            <div>
+                <div class="container">
+
+                    Find Game : <input ng-model="filterString" /><button class="btn btn-primary" ng-click="filterString = ''">Clear</button>
+                    
+                    <div id="dataPage">
+
+                        <div ng-repeat="data in wishResults | filter: {Game_Name: filterString}">
+
+                            <table>
+                                <tr><td class="searchTable"><br /></td></tr>
+                                <tr>
+                                    <td class="searchTable">
+                                        <div>
+                                            <input class="btnCheck" id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
+                                        </div>
+                                    </td>
+                                    <td id="imgCell" class="searchTable">
+                                        <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
+                                    </td>
+                                    <td class="searchTable">
+
+
+                                        {{data.Game_Name}}
+
+
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                            <div id="collapse{{ $index + 1}}" class="collapse">
+                          
+                                <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
+                                <button type="button" ng-click="" class="btn btn-info">Move to Owned</button>
+                                <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
+                                <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    
 
 </div>

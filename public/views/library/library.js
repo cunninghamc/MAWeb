@@ -18,7 +18,7 @@
 
     $http({
         method: "GET",
-        url: 'db_mastergamelist' + $rootScope.userID
+        url: 'db_mastergamelist' + $rootScope.userLibrary
     }).success(function (libraryData) {
         console.log("Controller - library results");
         
@@ -44,7 +44,7 @@
 
         //jsonInfo = '{ "User" : "' + $rootScope.userID + '", "Rating" : ' + $scope.overStar + ' }';
 
-        jsonInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userID + '", "GameRating" : ' + $scope.overStar +' }';
+        jsonInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userLibrary + '", "GameRating" : ' + $scope.overStar + ' }';
         
 
         $http.post("/db_insert_gameRating", JSON.parse(jsonInfo)).success(function (status) {
@@ -53,7 +53,7 @@
 
             $http({
                 method: "GET",
-                url: 'db_mastergamelist' + $rootScope.userID
+                url: 'db_mastergamelist' + $rootScope.userLibrary
             }).success(function (libraryData) {
                 console.log("Controller - library results");
 
@@ -69,7 +69,7 @@
 
     $scope.removeClicked = function (gameId) {
         console.log("Controller - remove Clicked");
-        removeInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userID + '" }';
+        removeInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userLibrary + '" }';
 
 
         $http.post("/db_remove_game", JSON.parse(removeInfo)).success(function (status) {
@@ -78,7 +78,7 @@
 
             $http({
                 method: "GET",
-                url: 'db_mastergamelist' + $rootScope.userID
+                url: 'db_mastergamelist' + $rootScope.userLibrary
             }).success(function (libraryData) {
                 console.log("Controller - remove results");
 
@@ -91,7 +91,7 @@
 
         $http({
             method: "GET",
-            url: 'db_mastergamelist' + $rootScope.userID
+            url: 'db_mastergamelist' + $rootScope.userLibrary
         }).success(function (libraryData) {
             console.log("Controller - library results");
 
@@ -107,7 +107,7 @@
             console.log("my_length - " + Object.keys(MyData).length);
 
             var sum = 0; for (var i = 0; i < Object.keys(MyData).length; i++) {
-                if (MyData[i].User == $rootScope.userID) {
+                if (MyData[i].User == $rootScope.userLibrary) {
                     console.log("my_rating:" + MyData[i].Rating);
                     rating = MyData[i].Rating;
                 };    

@@ -42,7 +42,7 @@ app.get('/loginSearch:loginStr', function (req, result) {
                     console.log(userInfo);
                 } else {
                     console.log('No User Found');
-                    userInfo = [];
+                    userInfo = JSON.parse('[{"_id":"0","User_Name":"","User_Color": "MAwhite.png","User_Library":"","User_Login": ""}]');
                 };
                 db.close();
                 result.json(userInfo);
@@ -305,7 +305,43 @@ app.get('/db_mastergamelist:userId', function (req, res) {
 
 });
 
+app.get('/db_masterwishlist:userId', function (req, res) {
 
+    var userId = req.params.userId;
+    console.log('Start - get mastergamelist');
+    console.log('gmgl - ' + userId);
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+            var findStr = ' { "Game_Wishers" : "' + userId + '"}';
+            var jsonFindStr = JSON.parse(findStr);
+            console.log('gmgl - ' + findStr);
+
+            collection.find(JSON.parse(findStr)).toArray(function (err, results) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('wishlist Found');
+                    console.log(results);
+                    res.send(results);
+                };
+
+                db.close();
+
+            });
+
+        }
+        //res.end('1');
+
+    });
+
+
+});
 app.post('/db_insert_gameRating', function (req, res) {    
 
     var vars = req.body;
@@ -383,6 +419,44 @@ app.post('/db_remove_game', function (req, res) {
                     console.log('error: ' & err);
                 } else {
                     console.log('Game Removed');
+                };
+
+                db.close();
+
+            });
+
+        }
+
+        res.end('1');
+
+    });
+
+
+});
+
+app.post('/db_remove_wish', function (req, res) {
+
+    var vars = req.body;
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+
+            console.log('GameID: ' + vars.GameID);
+            console.log('UserID: ' + vars.UserID);
+
+            jsonvar = '{ "Game_Wishers" : "' + vars.UserID + '" }';
+            console.log('jsonvar: ' + jsonvar);
+
+            collection.update({ "Game_ObjectId": vars.GameID }, { $pull: JSON.parse(jsonvar) }, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('Wish Removed');
                 };
 
                 db.close();

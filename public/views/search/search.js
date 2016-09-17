@@ -44,10 +44,10 @@
         var updateData = "";
         switch (reqType) {
             case "LibraryAdd":
-                ownersData = '"Game_Owners": ["' + $rootScope.userID + '"],';
+                ownersData = '"Game_Owners": ["' + $rootScope.userLibrary + '"],';
                 wisherData = '"Game_Wishers": [],';
 
-                updateData = '{"Game_Owners" : "' + $rootScope.userID + '"}';
+                updateData = '{"Game_Owners" : "' + $rootScope.userLibrary + '"}';
                 break;
             case "WishListAdd":
                 ownersData = '"Game_Owners": [],';
@@ -67,10 +67,23 @@
             console.log("Controller - find game master");
             console.log(result);
 
+            //console.log("Names:  " + JSON.stringify(gameData.name));
+            
+            var sum = 0; for (var i = 0; i < Object.keys(gameData.name).length; i++) {
+                console.log("nameData: " + JSON.stringify(gameData.name[i]));
+
+                if (gameData.name[i].$.primary) {
+                   
+                    GameName = gameData.name[i]._;
+
+                };
+                    
+            };
+                console.log("English Game Name:" + GameName);
             if (result == 'false') {
 
                 var Game = '{';
-                Game = Game + '"Game_Name": "' + gameData.name[0]._ + '",';
+                Game = Game + '"Game_Name": "' + GameName + '",';
                 Game = Game + '"Game_ObjectId": "' + gameData.$.objectid + '",';
                 Game = Game + '"Game_MinPlayers": "' + gameData.minplayers[0] + '",';
                 Game = Game + '"Game_MaxPlayers": "' + gameData.maxplayers[0] + '",';
@@ -105,7 +118,7 @@
                     console.log("Controller - UpdateLibrary Finished");
                     console.log("status = " + status);
                     
-             });
+                });
 
                 
             };
