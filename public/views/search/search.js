@@ -26,7 +26,7 @@
         }).success(function (searchData) {
             console.log("Controller - search results");
             console.log("SearchString: " + $scope.searchString);
-
+            console.log("SearchData: " + JSON.stringify(searchData));
             $scope.searchResults = searchData;
             $scope.loading = false;
         });

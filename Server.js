@@ -6,13 +6,14 @@ var app = express();
 var parseString = require('xml2js').parseString;
 
 var http = require('http');
+var https = require('https');
 
 var S = require('string');
-var assert = require('assert');
+//var assert = require('assert');
 
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
-var dbUrl = 'mongodb://server:27017/MAwebDB'
+var dbUrl = 'mongodb://localhost:27017/MAwebDB'
 
 var bodyParser = require("body-parser")
 
@@ -57,7 +58,7 @@ app.get('/loginSearch:loginStr', function (req, result) {
 
 
 function xmlToJson(url, callback) {
-    var req = http.get(url, function (res) {
+    var req = https.get(url, function (res) {
         var xml = '';
 
         res.on('data', function (chunk) {
@@ -73,6 +74,7 @@ function xmlToJson(url, callback) {
         });
 
         res.on('end', function () {
+            console.log(xml);
             parseString(xml, function (err, result) {
                 callback(null, result);
             });
@@ -81,24 +83,30 @@ function xmlToJson(url, callback) {
 };
 
 function bggPullOutIds(url, callback) {
+    
+    
 
-    var req = http.get(url, function (res) {
+    var req = https.get(url, function (res) {
         var xml = '';
 
         res.on('data', function (chunk) {
             xml += chunk;
+            console.log("+chunk" - chunk);
         });
 
         res.on('error', function (e) {
             callback(e, null);
+            console.log("error");
         });
 
         res.on('timeout', function (e) {
             callback(e, null);
+            console.log("timeout");
         });
 
         res.on('end', function () {
-            
+            console.log("end");
+            console.log(xml);
             
             var xmlArray = xml.split("</boardgame>");
             var idList = "";
@@ -121,8 +129,11 @@ app.get('/searchbgg:search', function (req, res) {
     console.log("Server - Searchbgg");
     var searchStr = req.params.search;
 
-    var url = "http://www.boardgamegeek.com/xmlapi/search?search=" + searchStr;
+    var url = "https://www.boardgamegeek.com/xmlapi/search?search=" + searchStr;
    
+    
+
+
     console.log(url);
           
 
@@ -132,9 +143,9 @@ app.get('/searchbgg:search', function (req, res) {
         }
 
         console.log("Server - bggPullOutIds");        
-        //console.log(data);
+        console.log(data);
 
-        var bggSearchUrl = "http://www.boardgamegeek.com/xmlapi/boardgame/" + data;
+        var bggSearchUrl = "https://www.boardgamegeek.com/xmlapi/boardgame/" + data;
 
         xmlToJson(bggSearchUrl, function (err, data) {
             if (err) {             
@@ -145,7 +156,6 @@ app.get('/searchbgg:search', function (req, res) {
 
             res.json(data);
 
-            //console.log(data);
         })
     })
 });
