@@ -44,7 +44,7 @@
 
         //jsonInfo = '{ "User" : "' + $rootScope.userID + '", "Rating" : ' + $scope.overStar + ' }';
 
-        jsonInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userLibrary + '", "GameRating" : ' + $scope.overStar + ' }';
+        jsonInfo = '{ "GameID" : "' + gameId + '", "UserID" : "' + $rootScope.userName + '", "GameRating" : ' + $scope.overStar + ' }';
         
 
         $http.post("/db_insert_gameRating", JSON.parse(jsonInfo)).success(function (status) {
@@ -107,7 +107,7 @@
             console.log("my_length - " + Object.keys(MyData).length);
 
             var sum = 0; for (var i = 0; i < Object.keys(MyData).length; i++) {
-                if (MyData[i].User == $rootScope.userLibrary) {
+                if (MyData[i].User == $rootScope.userName) {
                     console.log("my_rating:" + MyData[i].Rating);
                     rating = MyData[i].Rating;
                 };    
