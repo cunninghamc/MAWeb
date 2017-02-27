@@ -16,7 +16,7 @@
         //location.hash = '#/views/library/';
     };
 
-    $scope.LibraryName = "Cunningham";
+    $scope.LibraryName = $rootScope.userLibrary;
     $scope.Librarys = ['Cunningham', 'Lueders'];
 
     $scope.dropboxitemselected = function (item) {
