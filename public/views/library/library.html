@@ -8,6 +8,18 @@
         <img ng-src="/images/LibraryHexLogo.png" hero-id="libraryImg" class="hero" ng-click="libraryClicked();">
 
     </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{LibraryName}}
+        <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="a in Librarys">
+                <a ng-click="dropboxitemselected(a)">{{a}}</a>
+            </li>
+        </ul>
+    </div>
+   
 
     <br style="clear: left;" />
 
@@ -21,7 +33,7 @@
 
                 <div id="dataPage">
 
-                    <div ng-repeat="data in libraryResults | filter: {Game_Name: filterString}">
+                    <div ng-repeat="data in libraryResults | filter: {Game_Name: filterString, Game_Owners: LibraryName} | orderBy: 'Game_Name'">
 
                         <table>
                             <tr><td class="searchTable"><br /></td></tr>
@@ -60,7 +72,7 @@
                                     </td>
                                     <td>
                                         {{avg_rate = calculateAverage(data.Game_Rating);""}}
-                                        
+
                                         <span uib-rating ng-model="avg_rate" max="max" read-only=true></span>
                                     </td>
                                 </tr>
@@ -77,7 +89,7 @@
                                     </td>
                                     <td>
                                         {{my_rate = findMyRating(data.Game_Rating);""}}
-                                        
+
                                         <span uib-rating ng-model="my_rate" max="max" read-only=false ng-click="ratingClicked(data.Game_ObjectId);" on-hover="hoveringOver(value)"></span>
 
                                     </td>

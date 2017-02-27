@@ -16,6 +16,13 @@
         //location.hash = '#/views/library/';
     };
 
+    $scope.LibraryName = "Cunningham";
+    $scope.Librarys = ['Cunningham', 'Lueders'];
+
+    $scope.dropboxitemselected = function (item) {
+        $scope.LibraryName = item;
+    }
+
     $http({
         method: "GET",
         url: 'db_mastergamelist' + $rootScope.userLibrary

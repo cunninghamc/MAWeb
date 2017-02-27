@@ -290,11 +290,12 @@ app.get('/db_mastergamelist:userId', function (req, res) {
             console.log('Connected to', dbUrl);
 
             var collection = db.collection('MasterGameList');
-            var findStr = ' { "Game_Owners" : "' + userId + '"}' ;
-            var jsonFindStr = JSON.parse(findStr);
-            console.log('gmgl - ' + findStr);
+            //var findStr = ' { "Game_Owners" : "' + userId + '"}' ;
+            //var jsonFindStr = JSON.parse(findStr);
+            //console.log('gmgl - ' + findStr);
 
-            collection.find(JSON.parse(findStr)).toArray(function (err, results) {
+            //collection.find(JSON.parse(findStr)).toArray(function (err, results) {
+            collection.find().toArray(function (err, results) {
                 if (err) {
                     console.log('error: ' & err);
                 } else {
