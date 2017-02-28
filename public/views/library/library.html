@@ -11,7 +11,7 @@
     <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{LibraryName}}
-        <span class="caret"></span>
+            <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
             <li ng-repeat="a in Librarys">
@@ -19,136 +19,102 @@
             </li>
         </ul>
     </div>
-   
+
 
     <br style="clear: left;" />
 
     <div class="container">
 
         <div>
-            <div class="container">
+            <div>
 
                 Find Game : <input ng-model="filterString" /><button class="btn btn-primary" ng-click="filterString = ''">Clear</button>
 
+                <div ng-repeat="data in libraryResults | filter: {Game_Name: filterString, Game_Owners: LibraryName} | orderBy: 'Game_Name'">
 
-                <div id="dataPage">
+                    <div class="flip-container leftFloat" ontouchstart="this.classList.toggle('hover');">
+                        <div class="flipper">
+                            <div class="front fill">
+                                <img src="{{data.Game_Thumbnail}}" />                              
 
-                    <div ng-repeat="data in libraryResults | filter: {Game_Name: filterString, Game_Owners: LibraryName} | orderBy: 'Game_Name'">
+                            </div>
+                            <div class="back fill">
+                                
 
-                        <table>
-                            <tr><td class="searchTable"><br /></td></tr>
-                            <tr>
-                                <td class="searchTable">
-                                    <div>
-                                        <input class="btnCheck" id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
-                                    </div>
-                                </td>
-                                <td id="imgCell" class="searchTable">
-                                    <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
-                                </td>
-                                <td class="searchTable">
+                                <table>
+                                    <tr>
+                                        <td colspan="2">
+                                            {{data.Game_Name}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Players:
+                                        </td>
+                                        <td>
+                                            {{data.Game_MinPlayers}} - {{data.Game_MaxPlayers}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Play Time:
+                                        </td>
+                                        <td>
+                                            {{data.Game_PlayTime}} min
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Plays:
+                                        </td>
+                                        <td>
+                                            0
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Avg Rating:
+                                        </td>
+                                        <td>
+                                            {{avg_rate = calculateAverage(data.Game_Rating);""}}
 
+                                            <span uib-rating ng-model="avg_rate" max="max" read-only=true></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Your Rating:
+                                        </td>
+                                        <td>
+                                            {{my_rate = findMyRating(data.Game_Rating);""}}
 
-                                    {{data.Game_Name}}
+                                            <span uib-rating ng-model="my_rate" max="max" read-only=false ng-click="ratingClicked(data.Game_ObjectId);" on-hover="hoveringOver(value)"></span>
 
-
-                                </td>
-                            </tr>
-
-                        </table>
-
-                        <div id="collapse{{ $index + 1}}" class="collapse">
-                            <table>
-                                <tr>
-                                    <td>
-                                        Min Players:
-                                    </td>
-                                    <td>
-                                        {{data.Game_MinPlayers}}
-                                    </td>
-                                    <td width="5%"></td>
-                                    <td>
-                                        Avg Rating:
-                                    </td>
-                                    <td>
-                                        {{avg_rate = calculateAverage(data.Game_Rating);""}}
-
-                                        <span uib-rating ng-model="avg_rate" max="max" read-only=true></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Max Players:
-                                    </td>
-                                    <td>
-                                        {{data.Game_MaxPlayers}}
-                                    </td>
-                                    <td></td>
-                                    <td>
-                                        Your Rating:
-                                    </td>
-                                    <td>
-                                        {{my_rate = findMyRating(data.Game_Rating);""}}
-
-                                        <span uib-rating ng-model="my_rate" max="max" read-only=false ng-click="ratingClicked(data.Game_ObjectId);" on-hover="hoveringOver(value)"></span>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Play Time:
-                                    </td>
-                                    <td>
-                                        {{data.Game_PlayTime}} min
-                                    </td>
-                                    <td></td>
-                                    <td>
-                                        Logged Plays:
-                                    </td>
-                                    <td>
-                                        0
-                                    </td>
-                                </tr>
-
-
-                            </table>
-
-
-                            <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
-                            <button type="button" ng-click="" class="btn btn-info">Log Game Play</button>
-                            <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
-                            <button type="button" ng-click="removeClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
-
-                            <div class="modal fade" role="dialog" aria-hidden="true" id="modal-signin">
-                                <div class="modal-dialog">
-
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Remove Game Modal</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>This is where you will login</p>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" ng-model="loginStr" id="psw" placeholder="Enter Login">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-default btn-success " ng-click="loginScript(loginStr);" data-dismiss="modal">Login</button>
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td colspan="2">
+                                            <center>
+                                                <div>
+                                                    <button type="button" ng-click="" class="btn btn-sm btn-info">Play</button>
+                                                    <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-sm btn-warning">BGG</button>
+                                                    <button type="button" ng-click="removeClicked(data.Game_ObjectId)" class="btn btn-sm btn-danger">Del</button>
+                                                </div>
+                                            </center>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="clearFloat"></div>
             </div>
         </div>
     </div>
-
-
 </div>
+
+
+
+
