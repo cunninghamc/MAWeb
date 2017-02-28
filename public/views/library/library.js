@@ -23,6 +23,9 @@
         $scope.LibraryName = item;
     }
 
+   
+
+
     $http({
         method: "GET",
         url: 'db_mastergamelist' + $rootScope.userLibrary
