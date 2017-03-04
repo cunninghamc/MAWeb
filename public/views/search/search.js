@@ -26,7 +26,7 @@
         }).success(function (searchData) {
             console.log("Controller - search results");
             console.log("SearchString: " + $scope.searchString);
-            console.log("SearchData: " + JSON.stringify(searchData));
+            //console.log("SearchData: " + JSON.stringify(searchData));
             $scope.searchResults = searchData;
             $scope.loading = false;
         });
@@ -51,9 +51,9 @@
                 break;
             case "WishListAdd":
                 ownersData = '"Game_Owners": [],';
-                wisherData = '"Game_Wishers": ["' + $rootScope.userID + '"],';
+                wisherData = '"Game_Wishers": [{"Wisher_Name": "' + $rootScope.userName + '", "Wisher_Rating": "4-Interested"}],';
 
-                updateData = '{"Game_Wishers" : "' + $rootScope.userID + '"}';
+                updateData = '{"Game_Wishers" : {"Wisher_Name": "' + $rootScope.userName + '", "Wisher_Rating": "4-Interested"}}';
                 break;
             default:
                 ownersData = '"Game_Owners": [],';

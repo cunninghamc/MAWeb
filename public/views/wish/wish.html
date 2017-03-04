@@ -9,7 +9,17 @@
             <h2 hero-id="WishTitle" class="hero">Wish List</h2>
 
         </div>
-
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{WisherName}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li ng-repeat="a in Wishers">
+                    <a ng-click="dropboxitemselected(a)">{{a}}</a>
+                </li>
+            </ul>
+        </div>
         <br style="clear: left;" />
 
         <div class="container">
@@ -21,7 +31,7 @@
                     
                     <div id="dataPage">
 
-                        <div ng-repeat="data in wishResults | filter: {Game_Name: filterString}">
+                        <div ng-repeat="data in wishResults | filter: {Game_Name: filterString, Game_Wishers: {Wisher_Name: WisherName}} | orderBy: 'Game_Name'">
 
                             <table>
                                 <tr><td class="searchTable"><br /></td></tr>
@@ -35,24 +45,31 @@
                                         <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
                                     </td>
                                     <td class="searchTable">
-
-
                                         {{data.Game_Name}}
-
-
                                     </td>
                                 </tr>
 
                             </table>
 
-                            <div id="collapse{{ $index + 1}}" class="collapse">
-                          
+                            <div id="collapse{{$index + 1}}" class="collapse">
+
                                 <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
-                                <button type="button" ng-click="" class="btn btn-info">Move to Owned</button>
+                                <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-info">Move to Owned</button>
                                 <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
                                 <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
-
-                                
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
+                                            {{WishRating = ratings.Wisher_Rating}}
+                                            <span class="caret"></span>
+                                        </div> 
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in WishRatings">
+                                            <a ng-click="dropboxratingselected(data.Game_ObjectId,WisherName,a)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>

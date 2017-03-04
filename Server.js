@@ -74,7 +74,7 @@ function xmlToJson(url, callback) {
         });
 
         res.on('end', function () {
-            console.log(xml);
+            //console.log(xml);
             parseString(xml, function (err, result) {
                 callback(null, result);
             });
@@ -82,16 +82,14 @@ function xmlToJson(url, callback) {
     });
 };
 
-function bggPullOutIds(url, callback) {
-    
-    
+function bggPullOutIds(url, callback) {    
 
     var req = https.get(url, function (res) {
         var xml = '';
 
         res.on('data', function (chunk) {
             xml += chunk;
-            console.log("+chunk" - chunk);
+            //console.log("+chunk" - chunk);
         });
 
         res.on('error', function (e) {
@@ -106,7 +104,7 @@ function bggPullOutIds(url, callback) {
 
         res.on('end', function () {
             console.log("end");
-            console.log(xml);
+            //console.log(xml);
             
             var xmlArray = xml.split("</boardgame>");
             var idList = "";
@@ -130,13 +128,9 @@ app.get('/searchbgg:search', function (req, res) {
     var searchStr = req.params.search;
 
     var url = "https://www.boardgamegeek.com/xmlapi/search?search=" + searchStr;
-   
-    
-
 
     console.log(url);
           
-
     bggPullOutIds(url, function (err, data) {
         if (err) {
             return console.err(err);
@@ -273,6 +267,51 @@ app.put('/db_update_mastergamelist:gameId', function (req, res) {
         res.end('Added');
      });
     
+});
+
+app.put('/db_update_masterwishlist', function (req, res) {
+
+    var updateInfo = req.body;
+    console.log('Start - update masterwishlist');
+
+    console.log('req - ' + JSON.stringify(req.body));
+
+    var gameId = "" + req.body.Game + "";
+    var userId = req.body.User;
+    var rating = req.body.Rate;
+
+    console.log("wishlist - " + gameId + "~" + userId + "~" + rating);
+
+    console.log('umwl-gameId : ' + gameId);
+   // var gameName = '{"Game_ObjectId" : "' + gameId + '"}';
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+            //var addString = "{ $addToSet : " + JSON.stringify(updateInfo) + " } ";
+            var collection = db.collection('MasterGameList');
+            //console.log(JSON.stringify(updateInfo));
+            console.log("wishlist - " + gameId);
+
+            
+
+            //collection.findAndModify({ query: { "Game_ObjectId": gameId, "Game_Wishers": { "Wisher_Name": userId }, update: { "Game_Wishers": { "Wisher_Rating": rating } } } }, function (err, res) {
+            collection.update({ "Game_ObjectId" : gameId , "Game_Wishers.Wisher_Name": userId } , { $set : { "Game_Wishers.$.Wisher_Rating" : rating } } , function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('docs update');
+                };
+
+                db.close();
+                console.log('db close');
+            });
+        }
+        res.end('Added');
+    });
+
 });
 
 
@@ -460,10 +499,12 @@ app.post('/db_remove_wish', function (req, res) {
             console.log('GameID: ' + vars.GameID);
             console.log('UserID: ' + vars.UserID);
 
-            jsonvar = '{ "Game_Wishers" : "' + vars.UserID + '" }';
-            console.log('jsonvar: ' + jsonvar);
+            //jsonvar = '{ "Game_Wishers" : "' + vars.UserID + '" }';
+            //console.log('jsonvar: ' + jsonvar);
 
-            collection.update({ "Game_ObjectId": vars.GameID }, { $pull: JSON.parse(jsonvar) }, function (err, res) {
+            //collection.update({ "Game_ObjectId" : gameId , "Game_Wishers.Wisher_Name": userId } , { $set : { "Game_Wishers.$.Wisher_Rating" : rating } } , function (err, res) {
+
+            collection.update({"Game_ObjectId": vars.GameID}, { $pull: { "Game_Wishers":{  "Wisher_Name" : vars.UserID } }  }, function (err, res) {
                 if (err) {
                     console.log('error: ' & err);
                 } else {
@@ -474,6 +515,55 @@ app.post('/db_remove_wish', function (req, res) {
 
             });
 
+        }
+
+        res.end('1');
+
+    });
+
+
+});
+
+app.post('/db_wish_to_own', function (req, res) {
+
+    var vars = req.body;
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+
+            console.log('GameID: ' + vars.GameID);
+            console.log('UserID: ' + vars.UserID);
+            console.log('LibraryID: ' + vars.LibraryID);
+
+            
+
+            collection.update({ "Game_ObjectId": vars.GameID }, { $pull: { "Game_Wishers": { "Wisher_Name": vars.UserID } } }, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('Wish Removed');
+                };
+
+                
+
+            });
+
+            collection.update({ "Game_ObjectId": vars.GameID }, { $addToSet: { "Game_Owners":  vars.LibraryID } }, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('Owned Added');
+                };
+
+
+
+            });
+db.close();
         }
 
         res.end('1');
