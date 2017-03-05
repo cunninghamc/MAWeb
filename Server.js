@@ -232,6 +232,51 @@ app.post('/db_insert_mastergamelist', function (req, res) {
 
 });
 
+
+app.post('/db_insert_gamePlayed', function (req, res) {
+
+    console.log('+++++++++++++++++++++++++++++++++++++++');
+    console.log('Start - insert gamePlayed');
+    console.log('igp-GameName:' + req.body.GameID);
+    console.log('igp-Date:' + req.body.datePlayed);
+    console.log('igp-User:' + req.body.UserID);
+    console.log('+++++++++++++++++++++++++++++++++++++++');
+
+    var date = new Date(req.body.datePlayed);
+    var playDate = date.getMonth() + "/" + date.getDate() + "/" + date.getUTCFullYear()
+    console.log('igp-User:' + playDate);
+    
+    GameData = '{ "Game_Name" : "' + req.body.GameID + '" } , { $push : { "Player" : "' + req.body.UserID + '", "Date" : "' + playDate + '"}}';
+
+
+
+    MongoClient.connect(dbUrl, function (err, db) {
+        if (err) {
+            console.log('error:' + err);
+        } else {
+            console.log('Connected to', dbUrl);
+
+            var collection = db.collection('MasterGameList');
+
+            collection.update({ "Game_Name": req.body.GameID }, { $push: { "Game_Plays": { "Player": req.body.UserID, "Date": playDate } } }, function (err, res) {
+                if (err) {
+                    console.log('error: ' & err);
+                } else {
+                    console.log('docs inserted');
+                };
+
+                db.close();
+
+            });
+
+        }
+        res.end('1');
+
+    });
+
+
+});
+
 app.put('/db_update_mastergamelist:gameId', function (req, res) {
 
     var updateInfo = req.body;
