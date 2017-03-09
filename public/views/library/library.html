@@ -100,7 +100,7 @@
                                                 <div>
                                                     <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-sm btn-info">Play</button>
                                                     <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-sm btn-warning">BGG</button>
-                                                    <button type="button" ng-click="removeClicked(data.Game_ObjectId)" class="btn btn-sm btn-danger">Del</button>
+                                                    <button type="button" ng-click="removeClicked(data.Game_ObjectId)" ng-disabled="userLibrary != LibraryName" class="btn btn-sm btn-danger">Del</button>
                                                 </div>
 
                                                 

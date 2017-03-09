@@ -56,12 +56,12 @@
                         <div id="collapse1{{$index + 1}}" class="collapse">
 
                             <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
-                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-success">Move to Owned</button>
                             <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
                             <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
-                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-danger" data-dismiss="modal">Remove</button>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="userName != WisherName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
                                         {{WishRating = ratings.Wisher_Rating}}
                                         <span class="caret"></span>
@@ -101,12 +101,12 @@
                         <div id="collapse2{{$index + 1}}" class="collapse">
 
                             <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
-                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-success">Move to Owned</button>
                             <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
                             <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
-                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-danger" data-dismiss="modal">Remove</button>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="userName != WisherName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
                                         {{WishRating = ratings.Wisher_Rating}}
                                         <span class="caret"></span>
@@ -146,12 +146,12 @@
                         <div id="collapse3{{$index + 1}}" class="collapse">
 
                             <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
-                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-success">Move to Owned</button>
                             <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
                             <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
-                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-danger" data-dismiss="modal">Remove</button>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="userName != WisherName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
                                         {{WishRating = ratings.Wisher_Rating}}
                                         <span class="caret"></span>
@@ -191,12 +191,12 @@
                         <div id="collapse4{{$index + 1}}" class="collapse">
 
                             <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
-                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-success">Move to Owned</button>
                             <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
                             <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
-                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" ng-disabled="userName != WisherName" class="btn btn-danger" data-dismiss="modal">Remove</button>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="userName != WisherName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
                                         {{WishRating = ratings.Wisher_Rating}}
                                         <span class="caret"></span>
