@@ -39,7 +39,7 @@
                                             <div ng-repeat="names in data.name | filter : names.$.primary ">
                                                 <div ng-if="names.$.primary">
 
-                                                    {{names._}}
+                                                    {{gameName = names._}}
                                                     
                                                 </div>
                                             </div>
@@ -53,33 +53,135 @@
                                     <button type="button" ng-click="AddToLibrary('LibraryAdd',data,$index)" class="btn btn-primary">Add to Library</button>
                                     <button type="button" ng-click="AddToLibrary('WishListAdd',data,$index)" class="btn btn-success">Add to Wishlist</button>
                                     <button type="button" ng-click="redirectToBgg(data.$.objectid)" class="btn btn-warning">View on BGG.com</button>
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-play" >Log Play</button>
+                                    <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data,$index)" class="btn btn btn-info">Log Play</button>
 
                                 </div>
-                                <div class="modal fade" role="dialog" aria-hidden="true" id="modal-play">
-                                    <div class="modal-dialog">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                        <!-- Modal content-->
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                <h4 class="modal-title">Login Modal</h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>This is where you will login</p>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" ng-model="loginStr" id="psw" placeholder="Enter Login">
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-default btn-success " ng-click="loginScript(loginStr);" data-dismiss="modal">Login</button>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            </div>
+                <div class="modal fade" role="dialog" aria-hidden="true" id="modal-play">
+                    <div class="modal-dialog modal-sm">
+
+                        <!-- Modal content -->
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h3 class="modal-title">Log Play</h3>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player1}}
+                                            <span class="caret"></span>
                                         </div>
-
-                                    </div>
-
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,1)">{{a}}</a>
+                                        </li>
+                                    </ul>
                                 </div>
+                                <button type="button" ng-click="showPlayer(2)">+</button>
+                                <br />
+
+                                <div class="btn-group" ng-show="showPlayer2">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player2}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,2)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(3)" ng-show="showPlayer2">+</button>
+                                <br ng-show="showPlayer2" />
+
+                                <div class="btn-group" ng-show="showPlayer3">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player3}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,3)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(4)" ng-show="showPlayer3">+</button>
+                                <br ng-show="showPlayer3" />
+
+                                <div class="btn-group" ng-show="showPlayer4">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player4}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,4)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(5)" ng-show="showPlayer4">+</button>
+                                <br ng-show="showPlayer4" />
+
+                                <div class="btn-group" ng-show="showPlayer5">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player5}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,5)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(6)" ng-show="showPlayer5">+</button>
+                                <br ng-show="showPlayer5" />
+
+                                <div class="btn-group" ng-show="showPlayer6">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player6}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,6)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- <button type="button" ng-click="showPlayer3 = !showPlayer3" ng-show="showPlayer2">+</button> -->
+                                <br />
+
+                                <p>Played <b>{{modalGameName}}</b> on </p>
+                                <div class="form-group">
+                                    <p class="input-group">
+                                        <input type="text" id="datePicker" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-default btn-info " ng-click="logPlay(modalGameName, dt)" data-dismiss="modal">Log Play</button>
+                                <button type="button" class="btn btn-default btn-danger" ng-click="clearPlayers()" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </div>

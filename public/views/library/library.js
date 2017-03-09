@@ -25,8 +25,10 @@
 
     $scope.openModal = function (gameName) {
         $scope.modalGameName = gameName;
-
     };
+
+    $scope.playerName = $rootScope.userName;
+    console.log("Plays - Player Name : " + $scope.playerName);
 
 
     $http({
@@ -279,6 +281,17 @@
 
         $scope.clearPlayers();
         $scope.players = [];
+
+        $http({
+            method: "GET",
+            url: 'db_mastergamelist' + $rootScope.userLibrary
+        }).success(function (libraryData) {
+            console.log("Controller - library results");
+
+            $scope.libraryResults = libraryData;
+            console.log("libraryResults - " + $scope.libraryResults);
+
+        });
     };
 
     var playerCount = 0;

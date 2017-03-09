@@ -67,7 +67,9 @@
                                             Plays:
                                         </td>
                                         <td>
-                                            0
+                                            <div ng-repeat="plays in (playsCount = (data.Game_Plays | filter: { Player: playerName }))">
+                                               
+                                            </div>{{playsCount.length}}
                                         </td>
                                     </tr>
                                     <tr>

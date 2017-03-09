@@ -1,83 +1,346 @@
-﻿    <div class="container">
-        
-        <div class="subpageLogo">
-            <img ng-src="/images/editHexLogo.png" hero-id="wishImg" class="hero" ng-click="wishClicked();">
+﻿<div class="container">
 
-        </div>
-        
-        <div class="subpageTitle">
-            <h2 hero-id="WishTitle" class="hero">Wish List</h2>
+    <div class="subpageLogo">
+        <img ng-src="/images/editHexLogo.png" hero-id="wishImg" class="hero" ng-click="wishClicked();">
 
-        </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{WisherName}}
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li ng-repeat="a in Wishers">
-                    <a ng-click="dropboxitemselected(a)">{{a}}</a>
-                </li>
-            </ul>
-        </div>
-        <br style="clear: left;" />
+    </div>
 
-        <div class="container">
+    <div class="subpageTitle">
+        <h2 hero-id="WishTitle" class="hero">Wish List</h2>
 
-            <div>
-                <div class="container">
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{WisherName}}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="a in Wishers">
+                <a ng-click="dropboxitemselected(a)">{{a}}</a>
+            </li>
+        </ul>
+    </div>
+    <br style="clear: left;" />
 
-                    Find Game : <input ng-model="filterString" /><button class="btn btn-primary" ng-click="filterString = ''">Clear</button>
-                    
-                    <div id="dataPage">
+    <div class="container">
 
-                        <div ng-repeat="data in wishResults | filter: {Game_Name: filterString, Game_Wishers: {Wisher_Name: WisherName}} | orderBy: 'Game_Name'">
+        <div>
+            <div class="container">
 
-                            <table>
-                                <tr><td class="searchTable"><br /></td></tr>
-                                <tr>
-                                    <td class="searchTable">
-                                        <div>
-                                            <input class="btnCheck" id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse{{ $index + 1 }}">
-                                        </div>
-                                    </td>
-                                    <td id="imgCell" class="searchTable">
-                                        <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
-                                    </td>
-                                    <td class="searchTable">
-                                        {{data.Game_Name}}
-                                    </td>
-                                </tr>
+                Find Game : <input ng-model="filterString" /><button class="btn btn-primary" ng-click="filterString = ''">Clear</button>
 
-                            </table>
+                <div id="dataPage">
 
-                            <div id="collapse{{$index + 1}}" class="collapse">
+                    <h1>Must Have</h1>
 
-                                <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
-                                <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-info">Move to Owned</button>
-                                <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
-                                <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
-                                            {{WishRating = ratings.Wisher_Rating}}
-                                            <span class="caret"></span>
-                                        </div> 
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li ng-repeat="a in WishRatings">
-                                            <a ng-click="dropboxratingselected(data.Game_ObjectId,WisherName,a)">{{a}}</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                    <div ng-repeat="data in wishResults | filter: {Game_Name: filterString, Game_Wishers: {Wisher_Name: WisherName, Wisher_Rating: '1-Must Have'}} | orderBy: 'Game_Name'">
+
+                        <table>
+                            <tr><td class="searchTable"><br /></td></tr>
+                            <tr>
+                                <td class="searchTable">
+                                    <div>
+                                        <input class="btnCheck" id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse1{{ $index + 1 }}">
+                                    </div>
+                                </td>
+                                <td id="imgCell" class="searchTable">
+                                    <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
+                                </td>
+                                <td class="searchTable">
+                                    {{data.Game_Name}}
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <div id="collapse1{{$index + 1}}" class="collapse">
+
+                            <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
+                            <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
+                                        {{WishRating = ratings.Wisher_Rating}}
+                                        <span class="caret"></span>
+                                    </div>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="a in WishRatings">
+                                        <a ng-click="dropboxratingselected(data.Game_ObjectId,WisherName,a)">{{a}}</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
+
+                    <h1>Really Want</h1>
+
+                    <div ng-repeat="data in wishResults | filter: {Game_Name: filterString, Game_Wishers: {Wisher_Name: WisherName, Wisher_Rating: '2-Really Want'}} | orderBy: 'Game_Name'">
+
+                        <table>
+                            <tr><td class="searchTable"><br /></td></tr>
+                            <tr>
+                                <td class="searchTable">
+                                    <div>
+                                        <input class="btnCheck" id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse2{{ $index + 1 }}">
+                                    </div>
+                                </td>
+                                <td id="imgCell" class="searchTable">
+                                    <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
+                                </td>
+                                <td class="searchTable">
+                                    {{data.Game_Name}}
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <div id="collapse2{{$index + 1}}" class="collapse">
+
+                            <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
+                            <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
+                                        {{WishRating = ratings.Wisher_Rating}}
+                                        <span class="caret"></span>
+                                    </div>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="a in WishRatings">
+                                        <a ng-click="dropboxratingselected(data.Game_ObjectId,WisherName,a)">{{a}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1>Nice to Have</h1>
+
+                    <div ng-repeat="data in wishResults | filter: {Game_Name: filterString, Game_Wishers: {Wisher_Name: WisherName, Wisher_Rating: '3-Nice to Have'}} | orderBy: 'Game_Name'">
+
+                        <table>
+                            <tr><td class="searchTable"><br /></td></tr>
+                            <tr>
+                                <td class="searchTable">
+                                    <div>
+                                        <input class="btnCheck" id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse3{{ $index + 1 }}">
+                                    </div>
+                                </td>
+                                <td id="imgCell" class="searchTable">
+                                    <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
+                                </td>
+                                <td class="searchTable">
+                                    {{data.Game_Name}}
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <div id="collapse3{{$index + 1}}" class="collapse">
+
+                            <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
+                            <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
+                                        {{WishRating = ratings.Wisher_Rating}}
+                                        <span class="caret"></span>
+                                    </div>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="a in WishRatings">
+                                        <a ng-click="dropboxratingselected(data.Game_ObjectId,WisherName,a)">{{a}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1>Interested</h1>
+
+                    <div ng-repeat="data in wishResults | filter: {Game_Name: filterString, Game_Wishers: {Wisher_Name: WisherName, Wisher_Rating: '4-Interested'}} | orderBy: 'Game_Name'">
+
+                        <table>
+                            <tr><td class="searchTable"><br /></td></tr>
+                            <tr>
+                                <td class="searchTable">
+                                    <div>
+                                        <input class="btnCheck" id="btnCheck{{$index}}" type="checkbox" data-toggle="collapse" data-target="#collapse4{{ $index + 1 }}">
+                                    </div>
+                                </td>
+                                <td id="imgCell" class="searchTable">
+                                    <img id="thumbImage" src="{{data.Game_Thumbnail}}" />
+                                </td>
+                                <td class="searchTable">
+                                    {{data.Game_Name}}
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <div id="collapse4{{$index + 1}}" class="collapse">
+
+                            <!--<button type="button" ng-click="" class="btn btn-success">Change Ratings</button>-->
+                            <button type="button" ng-click="OwnWishClicked(data.Game_ObjectId)" class="btn btn-success">Move to Owned</button>
+                            <button type="button" data-toggle="modal" data-target="#modal-play" ng-click="openModal(data.Game_Name)" class="btn btn-info">Log Play</button>
+                            <button type="button" ng-click="redirectToBgg(data.Game_ObjectId)" class="btn btn-warning">View on BGG.com</button>
+                            <button type="button" ng-click="removeWishClicked(data.Game_ObjectId)" class="btn btn-danger" data-dismiss="modal">Remove</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <div ng-repeat="ratings in data.Game_Wishers | filter: {Wisher_Name : WisherName}">
+                                        {{WishRating = ratings.Wisher_Rating}}
+                                        <span class="caret"></span>
+                                    </div>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="a in WishRatings">
+                                        <a ng-click="dropboxratingselected(data.Game_ObjectId,WisherName,a)">{{a}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal fade" role="dialog" aria-hidden="true" id="modal-play">
+                    <div class="modal-dialog modal-sm">
+
+                        <!-- Modal content -->
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h3 class="modal-title">Log Play</h3>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player1}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,1)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(2)">+</button>
+                                <br />
+
+                                <div class="btn-group" ng-show="showPlayer2">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player2}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,2)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(3)" ng-show="showPlayer2">+</button>
+                                <br ng-show="showPlayer2" />
+
+                                <div class="btn-group" ng-show="showPlayer3">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player3}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,3)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(4)" ng-show="showPlayer3">+</button>
+                                <br ng-show="showPlayer3" />
+
+                                <div class="btn-group" ng-show="showPlayer4">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player4}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,4)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(5)" ng-show="showPlayer4">+</button>
+                                <br ng-show="showPlayer4" />
+
+                                <div class="btn-group" ng-show="showPlayer5">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player5}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,5)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" ng-click="showPlayer(6)" ng-show="showPlayer5">+</button>
+                                <br ng-show="showPlayer5" />
+
+                                <div class="btn-group" ng-show="showPlayer6">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <div>
+                                            {{player6}}
+                                            <span class="caret"></span>
+                                        </div>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="a in playerList">
+                                            <a ng-click="playerSelected(a,6)">{{a}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- <button type="button" ng-click="showPlayer3 = !showPlayer3" ng-show="showPlayer2">+</button> -->
+                                <br />
+
+                                <p>Played <b>{{modalGameName}}</b> on </p>
+                                <div class="form-group">
+                                    <p class="input-group">
+                                        <input type="text" id="datePicker" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-default btn-info " ng-click="logPlay(modalGameName, dt)" data-dismiss="modal">Log Play</button>
+                                <button type="button" class="btn btn-default btn-danger" ng-click="clearPlayers()" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
-
-
-    
-
+    </div>
 </div>
